@@ -4,7 +4,9 @@ class Context
   end
 
   def method(method_name, &block)
-    @created_trait.module_eval define_method(method_name, block)
+    @created_trait.module_eval do
+      define_method(method_name, block)
+    end
   end
 end
 

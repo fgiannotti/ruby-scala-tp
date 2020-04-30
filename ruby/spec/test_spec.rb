@@ -10,6 +10,12 @@ describe Trait do
           end
       end
 
+=begin
+      def Class.uses(t)
+        self.include(t)
+      end
+=end
+
       class Pato
         include MyTrait
       end
