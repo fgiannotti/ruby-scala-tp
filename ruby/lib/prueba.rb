@@ -4,11 +4,7 @@ class Context
   end
 
   def method(method_name, &block)
-    @created_trait.module_eval do
-      def method_name
-        block.call
-      end
-    end
+    @created_trait.module_eval define_method(method_name, block)
   end
 end
 
@@ -17,5 +13,4 @@ class Trait
     Context.new.instance_eval &block
   end
 end
-
 

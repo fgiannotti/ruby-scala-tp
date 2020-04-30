@@ -9,6 +9,13 @@ describe Trait do
           puts "patito"
           end
       end
+
+      class Pato
+        include MyTrait
+      end
+
+      pato1 = Pato.new
+      puts pato1.respond_to? :pato
     end
   end
 end
