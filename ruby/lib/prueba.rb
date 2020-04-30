@@ -4,7 +4,11 @@ class Context
   end
 
   def method(method_name, &block)
-    @created_trait.define_singleton_method(method_name, &block)
+    @created_trait.module_eval do
+      def method_name
+        block.call
+      end
+    end
   end
 end
 

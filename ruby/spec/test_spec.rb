@@ -3,7 +3,7 @@ describe Trait do
 
   describe '#materia' do
     it 'debería pasar este test' do
-      Trait.new.define do
+      Trait.define do
         module_name :MyTrait
         method :pato do
           puts "patito"
