@@ -1,10 +1,10 @@
 class Context
-  def nombre(n)
-    @createdTrait = Object.const_set(n, Module.new)
+  def module_name(name)
+    @created_trait = Object.const_set(name, Module.new)
   end
 
-  def method(m)
-    @createdTrait.define_singleton_method(m)
+  def method(method_name, &block)
+    @created_trait.define_singleton_method(method_name, &block)
   end
 end
 

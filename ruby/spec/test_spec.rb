@@ -1,10 +1,13 @@
-describe Prueba do
+describe Trait do
   let(:prueba) { Trait.new }
 
   describe '#materia' do
     it 'debería pasar este test' do
-      :prueba.define do
-        nombre :MiTrait
+      Trait.new.define do
+        module_name :MyTrait
+        method :pato do
+          puts "patito"
+          end
       end
     end
   end
