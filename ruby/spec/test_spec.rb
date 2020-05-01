@@ -1,33 +1,46 @@
 describe Trait do
   let(:prueba) { Trait.new }
 
-  describe '#materia' do
-    it 'debería pasar este test' do
+  describe '.define' do
       Trait.define do
         module_name :MyTrait
-        method :pato do
-          puts "patito"
-          end
+        method :method1 do
+           "Soy un patito"
+        end
+        method :method2 do |number|
+          number * 0+42
+        end
+      end
+      it 'add new Trait, MyTrait can respond to :method1' do
+        expect(MyTrait.respond_to? :method1).to be true
       end
 
-      class Pato
+      it 'My Trait can respond :method2' do
+        expect(MyTrait.respond_to? :method1).to be true
+      end
+
+  end
+  describe 'uses My Trait' do
+      class MyClass
         uses MyTrait
+        def method1
+          "Hello world"
+        end
       end
-      pato1 = Pato.new
+      example = MyClass.new
+      it 'example should respond to: method1' do
+        expect(example.respond_to? :method1).to be true
+      end
+      it 'example should respond to: method2' do
+        expect(example.respond_to? :method2).to be true
+      end
+      it 'example.method1 should use MyClass method1' do
+        expect(example.method1).to eq("Hello world")
+      end
 
-      puts "Class responds a uses:"
-      puts Class.respond_to? :uses
-      puts "Class Pato responds a uses:"
-      puts Pato.respond_to? :uses
+      it 'example.method2 should use MyTrait method2' do
+        expect(example.method2(1)).to eq(42)
+      end
 
-      puts "Trait responds pato:"
-      puts MyTrait.respond_to? :pato
-      puts "Class Pato responds a :pato :"
-      puts Pato.respond_to? :pato
-      puts "pato1 responds a pato:"
-      puts pato1.respond_to? :pato
-
-      pato1.pato
-    end
   end
 end

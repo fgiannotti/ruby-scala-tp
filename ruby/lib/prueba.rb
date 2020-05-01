@@ -23,4 +23,3 @@ class Class
     end
   end
 end
-
