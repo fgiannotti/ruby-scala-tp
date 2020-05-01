@@ -5,7 +5,7 @@ class Context
 
   def method(method_name, &block)
     @created_trait.module_eval do
-      define_method(method_name, block)
+      define_singleton_method(method_name, block)
     end
   end
 end
@@ -18,7 +18,7 @@ end
 
 class Class
   def uses(t)
-    t.instance_methods(false).each do
+    t.methods(false).each do
         |met| define_method(met){|*args| t.method(met).call(*args)}
     end
   end
