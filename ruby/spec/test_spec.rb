@@ -10,18 +10,17 @@ describe Trait do
           end
       end
 
-=begin
-      def Class.uses(t)
-        self.include(t)
-      end
-=end
+      puts Class.respond_to? :uses
 
       class Pato
-        include MyTrait
+        uses MyTrait
       end
+
+      puts Pato.respond_to? :uses
 
       pato1 = Pato.new
       puts pato1.respond_to? :pato
+
     end
   end
 end

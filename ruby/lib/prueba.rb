@@ -16,3 +16,9 @@ class Trait
   end
 end
 
+class Class
+  def uses(t)
+    include(t)
+  end
+end
+
