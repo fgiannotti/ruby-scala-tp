@@ -1,10 +1,20 @@
 class CustomTrait
-  def self.+(another_trait)
-    another_trait.methods(false).each do
-      |met| instance_eval do
-        define_method(met){|*args| another_trait.method(met).call(*args)}
+  def +(another_trait)
+
+    myTraitMethods = self.methods(false)
+    myTrait = self
+    Trait.define do
+      t = module_name :Algo
+
+      another_trait.methods(false).each do
+      |met| module_method(met){|*args| another_trait.method(met).call(*args)}
       end
+      myTraitMethods.each do
+      |met| module_method(met){|*args| myTrait.method(met).call(*args)}
+      end
+      t
     end
+
   end
 end
 
@@ -13,7 +23,7 @@ class Context
     @created_trait = Object.const_set(name, CustomTrait.new)
   end
 
-  def method(method_name, &block)
+  def module_method(method_name, &block)
     @created_trait.instance_eval do
       define_singleton_method(method_name, block)
     end

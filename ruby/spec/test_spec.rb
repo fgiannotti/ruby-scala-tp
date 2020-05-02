@@ -4,11 +4,11 @@ describe Trait do
   describe '.define' do
       Trait.define do
         module_name :MyTrait
-        method :method1 do
+        module_method :method1 do
            "Soy un patito"
         end
-        method :method2 do |number|
-          number * 0+42
+        module_method :method2 do |numb|
+          numb * 0+42
         end
       end
       it 'add new Trait, MyTrait can respond to :method1' do
@@ -20,17 +20,23 @@ describe Trait do
       end
 
   end
-=begin
   describe 'uses My Trait' do
+      Trait.define do
+        module_name :OtroTrait
+        module_method :method3 do
+        "Soy un trait.."
+        end
+      end
       class MyClass
         uses MyTrait
         def method1
           "Hello world"
         end
       end
+
       example = MyClass.new
-      it 'example should respond to: method1' do
-        expect(example.respond_to? :method1).to be true
+      it 'MyTrait should respond to: +' do
+        expect(MyTrait.respond_to? :+).to be true
       end
       it 'example should respond to: method2' do
         expect(example.respond_to? :method2).to be true
@@ -40,11 +46,41 @@ describe Trait do
       end
 
       it 'example.method2 should use MyTrait method2' do
-        expect(example.method2(1)).to eq(42)
+        expect(example.method2(2)).to eq(42)
       end
-
   end
+
+
+describe '+ operator' do
+  Trait.define do
+    module_name :MyOtherTrait
+    module_method :method3 do
+      "Hello world"
+    end
+  end
+  class ConflictClass
+    uses MyTrait + MyOtherTrait
+  end
+
+  conflict = ConflictClass.new
+  it 'conflict should respond to: method2' do
+    expect(conflict.respond_to? :method2).to be true
+  end
+  it 'conflict should respond to: method3' do
+    expect(conflict.respond_to? :method3).to be true
+  end
+  it 'conflict.method3 should use MyOtherTrait method3' do
+    expect(conflict.method3).to eq("Hello world")
+  end
+
+  it 'example.method2 should use MyTrait method2' do
+    expect(conflict.method2(1)).to eq(42)
+  end
+=begin
+     it 'example.method1 should throw exception' do
+
+    expect(conflict.method1).to raise_error(Exception)
+     end
 =end
 end
-
-
+  end
