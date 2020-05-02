@@ -28,7 +28,7 @@ end
 
 class Class
   def uses(t)
-    t.instance_methods(false).each do
+    t.methods(false).each do
         |met| define_method(met){|*args| t.method(met).call(*args)}
     end
   end
