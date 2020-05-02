@@ -15,8 +15,8 @@ describe Trait do
         expect(MyTrait.respond_to? :method1).to be true
       end
 
-      it 'My Trait can respond :method2' do
-        expect(MyTrait.respond_to? :method1).to be true
+      it 'CustomTrait can respond :method2' do
+        expect(CustomTrait.respond_to? :method2).to be false
       end
 
   end

@@ -1,10 +1,15 @@
+class CustomTrait
+  def self.+(another_trait)
+    uses(another_trait)
+  end
+end
 class Context
   def module_name(name)
-    @created_trait = Object.const_set(name, Module.new)
+    @created_trait = Object.const_set(name,CustomTrait.new)
   end
 
   def method(method_name, &block)
-    @created_trait.module_eval do
+    @created_trait.instance_eval do
       define_singleton_method(method_name, block)
     end
   end
