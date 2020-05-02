@@ -16,10 +16,11 @@ describe Trait do
       end
 
       it 'My Trait can respond :method2' do
-        expect(MyTrait.respond_to? :method1).to be true
+        expect(CustomTrait.respond_to? :method2).to be false
       end
 
   end
+=begin
   describe 'uses My Trait' do
       class MyClass
         uses MyTrait
@@ -43,4 +44,7 @@ describe Trait do
       end
 
   end
+=end
 end
+
+
