@@ -82,9 +82,20 @@ describe Trait do
       uses MyTrait + (MyOtherTrait - :method1)
     end
 
-    todoLegal = TodoBienTodoLegal.new
+    todo_legal = TodoBienTodoLegal.new
     it "todoLegal.method1 should return Soy un patito" do
-      expect(todoLegal.method1).to eq("Soy un patito")
+      expect(todo_legal.method1).to eq("Soy un patito")
+    end
+  end
+
+  describe '<< operator' do
+    class ConAlias
+      uses MyTrait << (:method1 >> :saludo)
+    end
+
+    con_alias = ConAlias.new
+    it "con_alias should respond to saludo" do
+      expect(con_alias.respond_to? :saludo).to be true
     end
   end
 end

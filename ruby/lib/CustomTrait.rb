@@ -27,6 +27,14 @@ class CustomTrait
   def -(met_symbol)
     singleton_method_removed met_symbol
   end
+
+  def <<(list_of_symbols)
+    original_name = list_of_symbols.first
+    new_name = list_of_symbols.last
+
+    block = Proc.new {|*args| method(original_name).call(*args)}
+    define_singleton_method(new_name, block)
+  end
 end
 
 

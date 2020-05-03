@@ -24,3 +24,9 @@ class Class
     end
   end
 end
+
+class Symbol
+  def >>(other_symbol)
+    [self, other_symbol]
+  end
+end
