@@ -25,15 +25,20 @@ class CustomTrait
   end
 
   def -(met_symbol)
-    singleton_method_removed met_symbol
+    new_methods = Hash.new
+    methods(false).reject { |met| met.equal? met_symbol}.each do |met|
+      proc = Proc.new { |*args| self.method(met).call(*args) }
+      new_methods[met] = proc
+    end
+    CustomTrait.new new_methods
   end
 
   def <<(list_of_symbols)
     original_name = list_of_symbols.first
     new_name = list_of_symbols.last
-
-    block = Proc.new {|*args| method(original_name).call(*args)}
-    define_singleton_method(new_name, block)
+    trait = self - original_name
+    trait.define_singleton_method(new_name,  &self.method(original_name))
+    trait
   end
 end
 
