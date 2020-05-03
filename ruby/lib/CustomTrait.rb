@@ -23,6 +23,10 @@ class CustomTrait
     }
     CustomTrait.new new_methods
   end
+
+  def -(met_symbol)
+    singleton_method_removed met_symbol
+  end
 end
 
 

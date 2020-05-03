@@ -43,8 +43,6 @@ describe Trait do
       expect(example.method2(2)).to eq(42)
     end
   end
-
-
   describe '+ operator' do
     Trait.define do
       module_name :MyOtherTrait
@@ -78,5 +76,15 @@ describe Trait do
       expect{conflict.method1}.to raise_exception(ConflictMethodError)
     end
 
+  end
+  describe '- operator' do
+    class TodoBienTodoLegal
+      uses MyTrait + (MyOtherTrait - :method1)
+    end
+
+    todoLegal = TodoBienTodoLegal.new
+    it "todoLegal.method1 should return Soy un patito" do
+      expect(todoLegal.method1).to eq("Soy un patito")
+    end
   end
 end
