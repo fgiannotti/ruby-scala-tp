@@ -1,27 +1,17 @@
 class CustomTrait
 
-  def initialize(new_methods = Hash.new)
-    new_methods.each do |met, block|
-      define_singleton_method(met, block)
+  def initialize(new_methods = Array.new)
+    new_methods.each do |met|
+      define_singleton_method(met.first, &met[1])
     end
   end
 
   def +(another_trait)
-    new_methods = Hash.new
-    my_methods = self.methods(false)
-    another_methods = another_trait.methods(false)
-    conflict_method_names = my_methods & another_methods
-    [self, another_trait].each { |trait|
-      (trait.methods(false)).map { |met|
-        proc = if conflict_method_names.include? met
-                 Proc.new { raise ConflictMethodError.new }
-               else
-                 Proc.new { |*args| trait.method(met).call(*args) }
-               end
-        new_methods[met] = proc
-      }
-    }
-    CustomTrait.new new_methods
+    methods_sum = [another_trait, self].flat_map { |trait| trait.methods(false).map { |m| [m, trait.method(m)] } }
+    conflicting_methods = methods_sum.select { |m| methods_sum.count { |met| met.first.equal? m.first } > 1 }
+    methods_that_raise_conflict_exception = conflicting_methods.uniq { |cm| cm.first }.map { |conflicting_method| [conflicting_method.first, Proc.new { raise ConflictMethodError }] }
+    final_methods = methods_sum - conflicting_methods | methods_that_raise_conflict_exception
+    CustomTrait.new final_methods
   end
 end
 
