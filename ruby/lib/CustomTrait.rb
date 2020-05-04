@@ -15,7 +15,7 @@ class CustomTrait
   end
 
   def -(method)
-    final_methods = methods(false) - [method]
+    final_methods = methods(false).select { |m| !m.equal? method }.map { |m| [m, method(m)]}
     CustomTrait.new final_methods
   end
 end
