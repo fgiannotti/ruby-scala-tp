@@ -13,6 +13,11 @@ class CustomTrait
     final_methods = methods_sum - conflicting_methods | methods_that_raise_conflict_exception
     CustomTrait.new final_methods
   end
+
+  def -(method)
+    final_methods = methods(false) - [method]
+    CustomTrait.new final_methods
+  end
 end
 
 
