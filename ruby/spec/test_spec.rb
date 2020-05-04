@@ -81,12 +81,16 @@ describe Trait do
 
   describe '- operator' do
     class TodoBienTodoLegal
-      uses MyTrait + (MyOtherTrait - :method1)
+      uses MyTrait + (MyOtherTrait - :method1) - :method3
     end
 
     todoLegal = TodoBienTodoLegal.new
     it "todoLegal.method1 should return Soy un patito" do
       expect(todoLegal.method1).to eq("Soy un patito")
+    end
+
+    it "todolegal should not respond to method3" do
+    expect(todoLegal.respond_to? :method3).to eq(false)
     end
   end
 end
