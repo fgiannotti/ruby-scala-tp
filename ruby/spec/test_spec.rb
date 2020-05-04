@@ -8,7 +8,7 @@ describe Trait do
         "Soy un patito"
       end
       module_method :method2 do |numb|
-        numb * 0+42
+        numb * 0 + 42
       end
     end
     it 'add new Trait, MyTrait can respond to :method1' do
@@ -23,6 +23,7 @@ describe Trait do
   describe 'uses My Trait' do
     class MyClass
       uses MyTrait
+
       def method1
         "Hello world"
       end
@@ -48,12 +49,13 @@ describe Trait do
     Trait.define do
       module_name :MyOtherTrait
       module_method :method1 do
-        "kawuabonga"
+      "kawuabonga"
       end
       module_method :method3 do
-        "Hello world"
+      "Hello world"
       end
     end
+
     class ConflictClass
       uses MyTrait + MyOtherTrait
     end
@@ -74,9 +76,8 @@ describe Trait do
     end
 
     it 'conflict.method1 should throw exception' do
-      expect{conflict.method1}.to raise_exception(ConflictMethodError)
+      expect { conflict.method1 }.to raise_exception(ConflictMethodError)
     end
-
   end
 
   describe '- operator' do
@@ -90,7 +91,7 @@ describe Trait do
     end
 
     it "todolegal should not respond to method3" do
-    expect(todoLegal.respond_to? :method3).to eq(false)
+      expect(todoLegal.respond_to? :method3).to eq(false)
     end
   end
 end
