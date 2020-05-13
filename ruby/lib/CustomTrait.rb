@@ -6,7 +6,7 @@ class CustomTrait
     end
   end
 
-  def +(another_trait)
+  def +(another_trait, strategy = DefaultStrategy)
     new_methods = Hash.new
     my_methods = self.methods(false)
     another_methods = another_trait.methods(false)
@@ -14,7 +14,7 @@ class CustomTrait
     [self, another_trait].each { |trait|
       (trait.methods(false)).map { |met|
         proc = if conflict_method_names.include? met
-                 Proc.new { raise ConflictMethodError.new }
+                 strategy.resolve_conflict(self, another_trait, met)
                else
                  Proc.new { |*args| trait.method(met).call(*args) }
                end
@@ -38,6 +38,22 @@ class CustomTrait
     trait
   end
 
+end
+
+class DefaultStrategy
+  def self.resolve_conflict(trait, another_trait, symbol_met)
+    return Proc.new { raise ConflictMethodError.new }
+  end
+end
+
+class OrderStrategy
+  def self.resolve_conflict(trait, another_trait, symbol_met)
+    return Proc.new do |*args|
+      val1 = trait.method(symbol_met).call(*args)
+      val2 = another_trait.method(symbol_met).call(*args)
+      "#{val1} \n#{val2}"
+    end
+  end
 end
 
 
