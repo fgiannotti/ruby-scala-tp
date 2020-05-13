@@ -1,4 +1,3 @@
-describe CustomTrait do
   describe '+ operator' do
 
     class ConflictClass
@@ -25,4 +24,3 @@ describe CustomTrait do
     end
 
   end
-end
