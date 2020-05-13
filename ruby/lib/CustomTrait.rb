@@ -6,7 +6,7 @@ class CustomTrait
     end
   end
 
-  def +(another_trait, strategy = DefaultStrategy)
+  def +(another_trait, strategy = DefaultStrategy.new)
     new_methods = Hash.new
     my_methods = self.methods(false)
     another_methods = another_trait.methods(false)
@@ -40,15 +40,23 @@ class CustomTrait
 
 end
 
+module Strategy
+  def initialize(block = Proc.new{ })
+    @block = block
+  end
+end
+
 class DefaultStrategy
-  def self.resolve_conflict(trait, another_trait, symbol_met)
-    return Proc.new { raise ConflictMethodError.new }
+  include Strategy
+  def resolve_conflict(trait, another_trait, symbol_met)
+    Proc.new { raise ConflictMethodError.new }
   end
 end
 
 class OrderStrategy
-  def self.resolve_conflict(trait, another_trait, symbol_met)
-    return Proc.new do |*args|
+  include Strategy
+  def resolve_conflict(trait, another_trait, symbol_met)
+    Proc.new do |*args|
       val1 = trait.method(symbol_met).call(*args)
       val2 = another_trait.method(symbol_met).call(*args)
       "#{val1} \n#{val2}"
@@ -56,6 +64,18 @@ class OrderStrategy
   end
 end
 
+class BlockStrategy
+  include Strategy
+
+  def resolve_conflict(trait, another_trait, symbol_met)
+    Proc.new do |*args|
+      [trait.method(symbol_met).call(*args), another_trait.method(symbol_met).call(*args)].inject do
+      |acc, b| @block.call(b)
+      end
+    end
+  end
+
+end
 
 class ConflictMethodError < StandardError
   def initialize(msg = "Can't execute the message cause has conflict")
