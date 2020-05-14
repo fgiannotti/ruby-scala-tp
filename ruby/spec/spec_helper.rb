@@ -1,20 +1,26 @@
 require_relative '../lib/Trait'
 
 Trait.define do
-  module_name :MyOtherTrait
-  module_method :method1 do
+  trait_name :MyOtherTrait
+  trait_method :method1 do
     "kawuabonga"
   end
-  module_method :method3 do
+  trait_method :method3 do
     "Hello world"
+  end
+  trait_method :method4 do
+    5
   end
 end
 Trait.define do
-  module_name :MyTrait
-  module_method :method1 do
+  trait_name :MyTrait
+  trait_method :method1 do
     "Soy un patito"
   end
-  module_method :method2 do |numb|
+  trait_method :method4 do
+    4
+  end
+  trait_method :method2 do |numb|
     numb * 0+42
   end
 end

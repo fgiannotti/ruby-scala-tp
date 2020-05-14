@@ -1,11 +1,11 @@
 require 'CustomTrait'
 
 class Context
-  def module_name(name)
+  def trait_name(name)
     @created_trait = Object.const_set(name, CustomTrait.new)
   end
 
-  def module_method(method_name, &block)
+  def trait_method(method_name, &block)
     @created_trait.define_singleton_method(method_name, block)
   end
 end
