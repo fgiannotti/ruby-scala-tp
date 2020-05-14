@@ -14,7 +14,7 @@ class CustomTrait
     [self, another_trait].each { |trait|
       (trait.methods(false)).map { |met|
         proc = if conflict_method_names.include? met
-                 strategy.resolve_conflict(method(met), another_trait.method(met))
+                 strategy.resolve_conflict(self, another_trait, met)
                else
                  Proc.new { |*args| trait.method(met).call(*args) }
                end
@@ -37,35 +37,58 @@ class CustomTrait
     trait.define_singleton_method(new_name, &self.method(original_name))
     trait
   end
-
 end
 
 class DefaultStrategy
-  def resolve_conflict(trait_method, another_trait_method)
+  def resolve_conflict(trait, another_trait, sym_method)
     Proc.new { raise ConflictMethodError.new }
   end
 end
 
 class OrderStrategy
-  def resolve_conflict(trait_method, another_trait_method)
+  def resolve_conflict(trait, another_trait, sym_method)
     Proc.new do |*args|
-      val1 = trait_method.call(*args)
-      val2 = another_trait_method.call(*args)
+      val1 = trait.method(sym_method).call(*args)
+      val2 = another_trait.method(sym_method).call(*args)
       "#{val1} \n#{val2}"
     end
   end
 end
 
 class BlockStrategy
-  def initialize(block)
-    @@block = block
-  end
-  def resolve_conflict(trait_method, another_trait_method)
-    Proc.new do |*args|
-      [trait_method.call(*args), another_trait_method.call(*args)].reduce {|arg1, arg2| @@block.call(arg1, arg2)}
-    end
+  def initialize(conflict_methods)
+    @@conflict_methods = conflict_methods
   end
 
+  def resolve_conflict(trait, another_trait, sym_method)
+    Proc.new do |*args|
+      @@conflict_methods.each { |conflict_met, strategy|
+        if sym_method == conflict_met
+          return [trait.method(sym_method).call(*args), another_trait.method(sym_method).call(*args)].reduce {|arg1, arg2| strategy.call(arg1, arg2)}
+        end
+      }
+    end
+  end
+end
+
+class ConditionStrategy
+  def initialize(conflict_methods)
+    @@conflict_methods = conflict_methods
+  end
+
+  def resolve_conflict(trait, another_trait, sym_method)
+    Proc.new do |*args|
+      @@conflict_methods.each { |conflict_met, strategy|
+        if sym_method == conflict_met
+          [trait.method(sym_method).call(*args), another_trait.method(sym_method).call(*args)].each do |arg|
+            if strategy.call(arg)
+              return arg
+            end
+          end
+        end
+      }
+    end
+  end
 end
 
 class ConflictMethodError < StandardError
