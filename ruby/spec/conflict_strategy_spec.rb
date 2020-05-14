@@ -14,11 +14,8 @@ describe 'OrderStrategy' do
 end
 
 describe 'BlockStrategy' do
-  procblock = Proc.new {|arg1, arg2| arg1 + arg2 }
   class ConBlockStrategy
-    uses MyOtherTrait .+(MyTrait, BlockStrategy.new do
-      procblock.call()
-    end)
+    uses MyOtherTrait .+(MyTrait, BlockStrategy.new(Proc.new {|arg1, arg2| arg1 << arg2 }))
   end
 
   con_block_strategy = ConBlockStrategy.new
@@ -27,6 +24,6 @@ describe 'BlockStrategy' do
   end
 
   it "con_block_strategy should use block with results of method1" do
-    expect(con_block_strategy.method1).to  eq("kawuabonga Soy un patito")
+    expect(con_block_strategy.method1).to  eq("kawuabongaSoy un patito")
   end
 end
