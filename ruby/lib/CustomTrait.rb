@@ -62,7 +62,7 @@ class BlockStrategy
   end
   def resolve_conflict(trait_method, another_trait_method)
     Proc.new do |*args|
-      [trait_method.call(*args), another_trait_method.call(*args)].reduce("") {|block, block2| @@block.call(block, block2)}
+      [trait_method.call(*args), another_trait_method.call(*args)].reduce {|arg1, arg2| @@block.call(arg1, arg2)}
     end
   end
 
