@@ -11,8 +11,8 @@ Trait.define do
   trait_method :method4 do
     5
   end
-  trait_method :method5 do |n|
-    n+2
+  trait_method :method5 do |patito|
+    patito.plumas = 58
   end
 end
 Trait.define do
@@ -26,7 +26,7 @@ Trait.define do
   trait_method :method2 do |numb|
     numb * 0+42
   end
-  trait_method :method5 do |n|
-    n+3
+  trait_method :method5 do |patito|
+    patito.pico = "lindo"
   end
 end

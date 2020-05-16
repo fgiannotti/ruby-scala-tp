@@ -9,7 +9,14 @@ describe 'OrderStrategy' do
   end
 
   it "con_order_strategy should use both method1" do
-    expect(con_order_strategy.method5 1).to  eq(6)
+    class Patito
+      attr_accessor :plumas
+      attr_accessor :pico
+    end
+    patito = Patito.new
+    con_order_strategy.method5 patito
+    expect(patito.plumas).to  eq(58)
+    expect(patito.pico).to eq("lindo")
   end
 end
 

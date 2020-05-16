@@ -48,8 +48,8 @@ end
 class OrderStrategy
   def resolve_conflict(trait, another_trait, sym_method)
     Proc.new do |*args|
-      result = trait.method(sym_method).call(*args)
-      another_trait.method(sym_method).call(result)
+      trait.method(sym_method).call(*args)
+      another_trait.method(sym_method).call(*args)
     end
   end
 end
