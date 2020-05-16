@@ -5,11 +5,11 @@ describe 'OrderStrategy' do
 
   con_order_strategy = ConOrderStrategy.new
   it "con_order_strategy should respond to method1" do
-    expect(con_order_strategy.respond_to? :method1).to be true
+    expect(con_order_strategy.respond_to? :method5).to be true
   end
 
   it "con_order_strategy should use both method1" do
-    expect(con_order_strategy.method1).to  eq("kawuabonga \nSoy un patito")
+    expect(con_order_strategy.method5 1).to  eq(6)
   end
 end
 
@@ -40,7 +40,7 @@ end
 
 describe 'ConditionStrategy' do
   class ConConditionStrategy
-    uses MyOtherTrait .+(MyTrait, ConditionStrategy.new({:method4 => Proc.new {|arg| arg == 5 }, :method1 => Proc.new {|arg| arg.length == 13 }}))
+    uses MyOtherTrait .+(MyTrait, ConditionStrategy.new({:method4 => Proc.new {|arg| arg == 5 }, :method1 => Proc.new {|arg| arg.length == 12 }}))
   end
 
   con_condition_strategy = ConConditionStrategy.new
@@ -49,7 +49,9 @@ describe 'ConditionStrategy' do
   end
 
   it "con_condition_strategy should use block with results of method1" do
-    expect(con_condition_strategy.method1).to  eq("Soy un patito")
+    expect do
+      con_condition_strategy.method1
+      end.to raise_error(NoMatchError)
   end
 
   it "con_condition_strategy should respond to method4" do

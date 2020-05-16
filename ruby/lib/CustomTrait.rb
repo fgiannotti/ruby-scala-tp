@@ -12,7 +12,7 @@ class CustomTrait
     another_methods = another_trait.methods(false)
     conflict_method_names = my_methods & another_methods
     [self, another_trait].each { |trait|
-      (trait.methods(false)).map { |met|
+      (trait.methods(false)).each { |met|
         proc = if conflict_method_names.include? met
                  strategy.resolve_conflict(self, another_trait, met)
                else
@@ -26,7 +26,7 @@ class CustomTrait
 
   def -(method)
     final_methods = Hash.new
-    methods(false).select { |m| !m.equal? method }.each { |m| final_methods[m] = Proc.new {method(m)}}
+    methods(false).select { |m| !m.equal? method }.each { |m| final_methods[m] = Proc.new { method(m) } }
     CustomTrait.new final_methods
   end
 
@@ -48,9 +48,8 @@ end
 class OrderStrategy
   def resolve_conflict(trait, another_trait, sym_method)
     Proc.new do |*args|
-      val1 = trait.method(sym_method).call(*args)
-      val2 = another_trait.method(sym_method).call(*args)
-      "#{val1} \n#{val2}"
+      result = trait.method(sym_method).call(*args)
+      another_trait.method(sym_method).call(result)
     end
   end
 end
@@ -64,7 +63,8 @@ class BlockStrategy
     Proc.new do |*args|
       @@conflict_methods.each { |conflict_met, strategy|
         if sym_method == conflict_met
-          return [trait.method(sym_method).call(*args), another_trait.method(sym_method).call(*args)].reduce {|arg1, arg2| strategy.call(arg1, arg2)}
+          return [trait.method(sym_method).call(*args), another_trait.method(sym_method).call(*args)]
+                     .reduce { |arg1, arg2| strategy.call(arg1, arg2) }
         end
       }
     end
@@ -78,16 +78,24 @@ class ConditionStrategy
 
   def resolve_conflict(trait, another_trait, sym_method)
     Proc.new do |*args|
-      @@conflict_methods.each { |conflict_met, strategy|
+      @@conflict_methods.each { |conflict_met, condition|
         if sym_method == conflict_met
-          [trait.method(sym_method).call(*args), another_trait.method(sym_method).call(*args)].each do |arg|
-            if strategy.call(arg)
-              return arg
+          [trait.method(sym_method), another_trait.method(sym_method)].each do |proc|
+            result = proc.call(*args)
+            if condition.call(result)
+              return result
             end
           end
+          raise NoMatchError
         end
       }
     end
+  end
+end
+
+class NoMatchError < StandardError
+  def initialize(msg = "No condition matched")
+    super
   end
 end
 

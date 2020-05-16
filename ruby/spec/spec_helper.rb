@@ -11,6 +11,9 @@ Trait.define do
   trait_method :method4 do
     5
   end
+  trait_method :method5 do |n|
+    n+2
+  end
 end
 Trait.define do
   trait_name :MyTrait
@@ -22,5 +25,8 @@ Trait.define do
   end
   trait_method :method2 do |numb|
     numb * 0+42
+  end
+  trait_method :method5 do |n|
+    n+3
   end
 end
