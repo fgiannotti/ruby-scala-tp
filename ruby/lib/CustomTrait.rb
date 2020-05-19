@@ -61,12 +61,8 @@ class BlockStrategy
 
   def resolve_conflict(trait, another_trait, sym_method)
     Proc.new do |*args|
-      @@conflict_methods.each { |conflict_met, strategy|
-        if sym_method == conflict_met
-          return [trait.method(sym_method).call(*args), another_trait.method(sym_method).call(*args)]
-                     .reduce { |arg1, arg2| strategy.call(arg1, arg2) }
-        end
-      }
+      strategy = @@conflict_methods.find { |conflict_met, _| conflict_met == sym_method }.last
+      [trait.method(sym_method).call(*args), another_trait.method(sym_method).call(*args)].reduce { |arg1, arg2| strategy.call(arg1, arg2) }
     end
   end
 end
