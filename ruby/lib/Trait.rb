@@ -6,7 +6,7 @@ class Context
   end
 
   def trait_method(method_name, &block)
-    @created_trait.define_singleton_method(method_name, block)
+    @created_trait.my_methods[method_name] = block
   end
 end
 
@@ -18,10 +18,10 @@ end
 
 class Class
   def uses(t)
-    t.methods(false).each do
-    |met|
-      define_method(met) { |*args| t.method(met).call(*args) }
-    end
+    t.my_methods.each {
+    |met, body|
+      define_method(met) { |*args| body.call(*args) }
+    }
   end
 end
 

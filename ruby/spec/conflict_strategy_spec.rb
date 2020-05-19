@@ -58,7 +58,7 @@ describe 'ConditionStrategy' do
   it "con_condition_strategy should use block with results of method1" do
     expect do
       con_condition_strategy.method1
-      end.to raise_error(NoMatchError)
+      end.to eq("No condition matched")
   end
 
   it "con_condition_strategy should respond to method4" do
