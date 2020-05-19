@@ -1,5 +1,6 @@
 class CustomTrait
   attr_accessor :my_methods
+
   def initialize(new_methods = Hash.new)
     @my_methods = new_methods
   end
@@ -11,12 +12,12 @@ class CustomTrait
     conflict_method_names = my_methods.select { |met, _| another_methods.include? met }
     my_methods.merge(another_methods).each { |met, block_met|
       proc = if conflict_method_names.include? met
-                 strategy.resolve_conflict(self, another_trait, met)
-               else
-                 Proc.new { |*args| block_met.call(*args) }
-               end
-        new_methods[met] = proc
-      }
+               strategy.resolve_conflict(self, another_trait, met)
+             else
+               Proc.new { |*args| block_met.call(*args) }
+             end
+      new_methods[met] = proc
+    }
     CustomTrait.new new_methods
   end
 
@@ -70,17 +71,14 @@ class ConditionStrategy
 
   def resolve_conflict(trait, another_trait, sym_method)
     Proc.new do |*args|
-      @conflict_methods.each { |conflict_met, condition|
-        if sym_method == conflict_met
-          [trait.my_methods[sym_method], another_trait.my_methods[sym_method]].each do |proc|
-            result = proc.call(*args)
-            if condition.call(result)
-              return result
-            end
-          end
-          return "No condition matched"
-        end
-      }
+      conflicting_method = @conflict_methods.select { |conflict_met, _| conflict_met == sym_method }
+      proc = [trait.my_methods[sym_method], another_trait.my_methods[sym_method]]
+                 .select { |met| conflicting_method[sym_method].call(met.call(*args)) }.first
+      if proc == nil
+        raise NoMatchError
+      else
+        proc.call(*args)
+      end
     end
   end
 end
