@@ -1,6 +1,5 @@
 import org.scalatest.{FreeSpec, Matchers}
-import tp.Requisito.TengaItem
-import tp.{Arma, Comestible, Dragon, FuriaNocturna, Jinete, Patapez, SistemaDeVuelo, Vikingo}
+import tp.{Arma, Comestible, Dragon, FuriaNocturna, Jinete, Patapez, SistemaDeVuelo, TengaItem, Vikingo}
 
 class ProjectSpec extends FreeSpec with Matchers {
 

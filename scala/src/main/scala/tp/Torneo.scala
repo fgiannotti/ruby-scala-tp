@@ -1,31 +1,42 @@
 package tp
 
-case class Torneo(postas: Set[Posta], dragones: List[Dragon], participantes: List[Participante])
+import tp.CriterioAdmision.CriterioAdmision
 
-trait CriterioDeAdmision {
-  def seCumple(participante: Participante): Boolean
-}
+case class Torneo(postas: List[Posta], dragones: List[Dragon], participantes: List[Participante])
 
 trait Posta {
   def puedeParticipar(participante: Participante): Boolean = {
-    !hacerParticipar(participante).quedariaHambriento && requisito.exists(_.seCumple(participante))
+    !hacerParticipar(participante).quedariaHambriento && criterioAdmision.exists(_.apply(participante))
   }
   def obtenerGanador: Option[Participante]
-  def requisito: Option[CriterioDeAdmision]
+  def criterioAdmision: Option[CriterioAdmision]
   def hacerParticipar(participante: Participante): Participante = ???
+  def compararParticipantes(participante: Participante, otroParticipante: Participante): Participante
 }
 
-case class Carrera(km: Int, requisito: Option[CriterioDeAdmision]) extends Posta {
+case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision]) extends Posta {
   override def obtenerGanador: Option[Participante] = ???
+
+  override def compararParticipantes(participante: Participante, otroParticipante: Participante): Participante = //todo mejorar
+    if(participante.velocidad >= otroParticipante.velocidad) participante else otroParticipante
+
 }
 
+case class Combate() extends Posta {
+  override def obtenerGanador: Option[Participante] = ???
 
+  override def criterioAdmision: Option[CriterioAdmision] = ???
 
-case class Pesca() extends Posta{
+  override def compararParticipantes(participante: Participante, otroParticipante: Participante): Participante =
+    if(participante.danio >= otroParticipante.danio) participante else otroParticipante
+}
+
+case class Pesca(criterioAdmision: Option[CriterioAdmision]) extends Posta {
   override def hacerParticipar(participante: Participante) = ???
   override def puedeParticipar(participante: Participante): Boolean = ???
 
   override def obtenerGanador: Option[Participante] = ???
 
-  override def requisito: Option[CriterioDeAdmision] = ???
+  override def compararParticipantes(participante: Participante, otroParticipante: Participante): Participante = //todo mejorar
+    if(participante.maximaCargaDePescado >= otroParticipante.maximaCargaDePescado) participante else otroParticipante
 }
