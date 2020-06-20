@@ -2,7 +2,7 @@ package tp
 
 import tp.Requisito.Requisito
 
-case class Dragon(velocidadBase: Int = 60, raza: Raza, requisitosExtra: List[Requisito]) {
+case class Dragon(velocidadBase: Int = 60, raza: Raza, requisitosExtra: List[Requisito]=Nil) {
   def velocidad: Double = raza.velocidad(velocidadBase)
 
   def danio: Int = raza.danio

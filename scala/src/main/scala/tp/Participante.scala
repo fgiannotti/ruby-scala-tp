@@ -8,11 +8,16 @@ case class Vikingo(peso: Int, velocidad: Int, barbarosidad: Int, nivelDeHambre: 
 
   def danio: Int = barbarosidad + item.danio
 
-  def participarEnPosta(posta: Posta): Unit = ???
-
   def montar(dragon: Dragon): Participante =
     if (dragon.puedeSerMontadoPor(this)) Jinete(this, dragon) else this
 
+}
+
+case class Patapez(itemComestible: Comestible) extends Participante {
+
+  override def maximaCargaDePescado: Double = ???
+
+  override def nivelDeHambre: Int = ???
 }
 
 case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
@@ -26,4 +31,5 @@ trait Participante {
   def maximaCargaDePescado: Double
   def nivelDeHambre: Int
   def quedariaHambriento: Boolean = nivelDeHambre >= 100
+  def participarEnPosta(posta: Posta): Unit = ???
 }

@@ -10,4 +10,4 @@ case object SistemaDeVuelo extends Item
 
 case class Comestible(porcentajeSaciedad: Int) extends Item
 
-object Patapez extends Vikingo(23, 50, 3, 55, Comestible(porcentajeSaciedad = 6))
+//object Patapez extends Vikingo(23, 50, 3, 55, Comestible(porcentajeSaciedad = 6))
