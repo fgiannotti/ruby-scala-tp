@@ -1,3 +1,6 @@
+package tp
+
+import tp.Requisito.Requisito
 
 case class Dragon(velocidadBase: Int = 60, raza: Raza, requisitosExtra: List[Requisito]) {
   def velocidad: Double = raza.velocidad(velocidadBase)
@@ -7,9 +10,9 @@ case class Dragon(velocidadBase: Int = 60, raza: Raza, requisitosExtra: List[Req
   def maximaCarga: Double = raza.peso * 0.2
 
   def puedeSerMontadoPor(vikingo: Vikingo): Boolean = {
-    PuedeCargarSuPeso.seCumple(vikingo, this) &&
-      requisitosExtra.forall(_.seCumple(vikingo, this)) &&
-      raza.requisitos.forall(_.seCumple(vikingo, this))
+    Requisito.PuedeCargarSuPeso().apply(vikingo, this) &&
+      requisitosExtra.forall(_.apply(vikingo, this)) &&
+      raza.requisitos.forall(_.apply(vikingo, this))
   }
 }
 
@@ -38,26 +41,3 @@ case class Gronkle(peso: Int, requisitos: List[Requisito]) extends Raza {
 
   def danio: Int = peso * 5
 }
-
-trait Requisito {
-  def seCumple(vikingo: Vikingo, dragon: Dragon): Boolean
-}
-
-case class TengaItem(item: Item) extends Requisito {
-  override def seCumple(vikingo: Vikingo, dragon: Dragon): Boolean = {
-    vikingo.item.equals(item)
-  }
-}
-
-case class SuficienteBarbaridad(minimo: Int) extends Requisito {
-  override def seCumple(vikingo: Vikingo, dragon: Dragon): Boolean = {
-    vikingo.barbarosidad >= minimo
-  }
-}
-
-object PuedeCargarSuPeso extends Requisito {
-  override def seCumple(vikingo: Vikingo, dragon: Dragon): Boolean = {
-    dragon.maximaCarga <= vikingo.peso
-  }
-}
-

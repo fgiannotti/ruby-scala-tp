@@ -1,3 +1,5 @@
+package tp
+
 case class Vikingo(peso: Int, velocidad: Int, barbarosidad: Int, nivelDeHambre: Int, item: Item) extends Participante {
   def maximaCargaDePescado: Double = peso * 0.5 + barbarosidad * 2
 
