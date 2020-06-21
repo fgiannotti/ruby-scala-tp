@@ -4,19 +4,19 @@ import tp.CriterioAdmision.CriterioAdmision
 
 trait Posta {
   def puedeParticipar(participante: Participante): Boolean = {
-    !participante.participarEnPosta(this).quedariaHambriento && criterioAdmision.exists(_.apply(participante))
+    !participante.participarEnPosta(this).quedariaHambriento && criterioAdmision.forall(_.apply(participante))
   }
   def criterioAdmision: Option[CriterioAdmision]
   def hacerParticipar(participantes: List[Participante]): List[Participante] = participantes
       .filter(participante => puedeParticipar(participante))
       .map(participante => participante.participarEnPosta(this))
-      .sortBy(participante => this.criterioGanador(participante)).reverse
+      .sortBy(participante => this.criterioGanador(participante))
   def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean
   def criterioGanador(participante: Participante): Double
   def costoParticipacion: Int
 }
 
-case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision]) extends Posta {
+case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision] = None) extends Posta {
   override def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean =
     participante.velocidad >= otroParticipante.velocidad
 
@@ -25,7 +25,7 @@ case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision]) extends 
   override def costoParticipacion: Int = km
 }
 
-case class Combate(criterioAdmision: Option[CriterioAdmision]) extends Posta {
+case class Combate(criterioAdmision: Option[CriterioAdmision] = None) extends Posta {
   override def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean =
     participante.danio >= otroParticipante.danio
 
@@ -35,7 +35,7 @@ case class Combate(criterioAdmision: Option[CriterioAdmision]) extends Posta {
   override def costoParticipacion: Int = 10
 }
 
-case class Pesca(criterioAdmision: Option[CriterioAdmision]) extends Posta {
+case class Pesca(criterioAdmision: Option[CriterioAdmision] = None) extends Posta {
 
   override def criterioGanador(participante: Participante): Double = participante.maximaCargaDePescado
 
