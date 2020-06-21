@@ -15,8 +15,11 @@ case class Vikingo(peso: Int, velocidad: Double, barbarosidad: Int, nivelDeHambr
 
   def aumentarHambre(porcentaje: Int): Vikingo = copy(nivelDeHambre = nivelDeHambre + porcentaje)
 
-  def mejorMontura(dragones: List[Dragon], posta: Posta): Participante = {
-    posta.hacerParticipar(dragones.filter(_.puedeSerMontadoPor(this)).map(montar) :+ this).head
+  def mejorMontura(dragones: List[Dragon], posta: Posta): Option[Dragon] = {
+    posta.hacerParticipar(dragones.filter(_.puedeSerMontadoPor(this)).map(montar) :+ this).head match {
+      case Jinete(_, dragon) => Some(dragon)
+      case _ => None
+    }
   }
 
 }
