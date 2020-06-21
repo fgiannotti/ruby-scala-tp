@@ -10,7 +10,7 @@ case class Dragon(velocidadBase: Int = 60, raza: Raza, requisitosExtra: List[Req
   def maximaCarga: Double = raza.peso * 0.2
 
   def puedeSerMontadoPor(vikingo: Vikingo): Boolean = {
-    Requisito.PuedeCargarSuPeso().apply(vikingo, this) &&
+    PuedeCargarSuPeso().apply(vikingo, this) &&
       requisitosExtra.forall(_.apply(vikingo, this)) &&
       raza.requisitos.forall(_.apply(vikingo, this))
   }
