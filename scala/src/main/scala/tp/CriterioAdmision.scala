@@ -16,10 +16,16 @@ case class BarbaridadMinima(min: Int) extends CriterioAdmision {
 }
 
 case class TieneArma() extends CriterioAdmision {
-  override def apply(participante: Participante): Boolean = participante.item.isInstanceOf[Arma]
+  override def apply(participante: Participante): Boolean = participante.item match {
+    case Arma(_) => true
+    case _ => false
+  }
 }
 
 case class EsJinete() extends CriterioAdmision {
-  override def apply(participante: Participante): Boolean = participante.isInstanceOf[Jinete]
+  override def apply(participante: Participante): Boolean = participante match {
+    case Jinete(_, _) => true
+    case _ => false
+  }
 }
 

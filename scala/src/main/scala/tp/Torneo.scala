@@ -27,7 +27,7 @@ class Estandar extends ReglaTorneo {
   }
 
   override def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] = {
-    resultadoPosta.slice(0, resultadoPosta.size / 2)
+    resultadoPosta.take(resultadoPosta.size / 2)
   }
 
   override def elegirGanador(vikingos: List[Vikingo]): Vikingo =
@@ -41,7 +41,7 @@ case class Eliminacion(cantidadAEliminar: Int) extends Estandar {
 
 case class TorneoInverso() extends Estandar {
   override def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] =
-    resultadoPosta.slice(resultadoPosta.size / 2, resultadoPosta.size)
+    resultadoPosta.drop(resultadoPosta.size / 2)
 
   override def elegirGanador(vikingos: List[Vikingo]): Vikingo =
     vikingos.last
@@ -69,7 +69,7 @@ case class Torneo(postas: List[Posta], dragones: List[Dragon], vikingos: List[Vi
   def jugarTorneo: Option[Vikingo] = {
     jugarPostas(postas, vikingos) match {
       case Nil => None
-      case x :: Nil => Some(x)
+      case x :: Nil => Option(x)
       case finalistas => Option(regla.elegirGanador(finalistas))
     }
   }
