@@ -1,5 +1,7 @@
 package tp
 
+import tp.Jugador.Jugador
+
 trait ReglaTorneo {
   def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante]
 
@@ -61,13 +63,13 @@ case class Handicap() extends Estandar {
   }
 }
 
-/*object PorEquipos extends ReglaTorneo {
+object Jugador {
+  type Jugador = List[Vikingo]
+}
 
-}*/
-
-case class Torneo(postas: List[Posta], dragones: List[Dragon], vikingos: List[Vikingo], regla: ReglaTorneo) {
+case class Torneo(postas: List[Posta], dragones: List[Dragon], jugadores: List[Jugador], regla: ReglaTorneo) {
   def jugarTorneo: Option[Vikingo] = {
-    jugarPostas(postas, vikingos) match {
+    jugarPostas(postas, jugadores.flatten) match {
       case Nil => None
       case x :: Nil => Option(x)
       case finalistas => Option(regla.elegirGanador(finalistas))
