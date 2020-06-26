@@ -10,7 +10,7 @@ trait Posta {
   def hacerParticipar(participantes: List[Participante]): List[Participante] = participantes
       .filter(participante => puedeParticipar(participante))
       .map(participante => participante.participarEnPosta(this))
-      .sortBy(participante => this.criterioGanador(participante))
+      .sortBy(participante => this.criterioGanador(participante)).reverse
   def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean
   def criterioGanador(participante: Participante): Double
   def costoParticipacion: Int

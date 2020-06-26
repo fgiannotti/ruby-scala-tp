@@ -41,11 +41,13 @@ case class Vikingo(peso: Int, velocidad: Double, barbarosidad: Int, nivelDeHambr
   def aumentarHambre(porcentaje: Int): Vikingo =
     copy(nivelDeHambre = nivelDeHambre + porcentaje)
 
-  def mejorMontura(dragones: List[Dragon], posta: Posta): Option[Dragon] =
-    posta.hacerParticipar(dragones.filter(_.puedeSerMontadoPor(this)).map(montar) :+ this).head match {
+  def mejorMontura(dragones: List[Dragon], posta: Posta): Option[Dragon] = {
+    val dragonesQuePuedenSerMontados = dragones.filter(_.puedeSerMontadoPor(this))
+    posta.hacerParticipar(dragonesQuePuedenSerMontados.map(montar) :+ this).head match {
       case Jinete(_, dragon) => Some(dragon)
       case _ => None
     }
+  }
 }
 
 case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
