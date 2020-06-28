@@ -43,8 +43,8 @@ case class Vikingo(peso: Int, velocidad: Double, barbarosidad: Int, nivelDeHambr
 
   def mejorMontura(dragones: List[Dragon], posta: Posta): Option[Dragon] = {
     val dragonesQuePuedenSerMontados = dragones.filter(_.puedeSerMontadoPor(this))
-    posta.hacerParticipar(dragonesQuePuedenSerMontados.map(montar) :+ this).head match {
-      case Jinete(_, dragon) => Some(dragon)
+    posta.hacerParticipar(dragonesQuePuedenSerMontados.map(montar) :+ this).headOption match {
+      case Some(Jinete(_, dragon)) => Some(dragon)
       case _ => None
     }
   }

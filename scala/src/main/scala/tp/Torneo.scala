@@ -38,8 +38,13 @@ trait Torneo[T] {
     }
   }
 
-  def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] =
-    resultadoPosta.take(resultadoPosta.size / 2)
+  def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] = {
+   resultadoPosta match{
+    case (x::s::xs) => resultadoPosta.take(resultadoPosta.size / 2)
+    case _ => resultadoPosta
+  }
+ }
+
 
   def prepararParticipantes(vikingos: List[Vikingo], dragones: List[Dragon], posta: Posta): List[Participante] = {
     var dragonesDisponibles = dragones

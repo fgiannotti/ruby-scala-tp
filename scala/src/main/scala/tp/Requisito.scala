@@ -20,6 +20,10 @@ case class SuficienteBarbaridad(minimo: Int) extends Requisito {
 
 case class PuedeCargarSuPeso() extends Requisito {
   override def apply(vikingo: Vikingo, dragon: Dragon): Boolean = {
-    dragon.maximaCarga <= vikingo.peso
+    dragon.maximaCarga >= vikingo.peso
   }
+}
+
+case class NoSuperaPesoMaximo(maximo:Int) extends Requisito{
+  override def apply(vikingo: Vikingo, dragon: Dragon): Boolean = vikingo.peso <= maximo
 }

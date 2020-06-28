@@ -17,11 +17,17 @@ class PostasSpec extends FreeSpec with Matchers {
       }
     }
     "un vikingo no puede participar en una posta" - {
-      "cuando no cumple el criterio de admision" in {
+      "cuando no cumple el criterio de admision de una pesca" in {
         pesca.puedeParticipar(patan) shouldBe false
       }
       "cuando quedaria totalmente hambriento" in {
         combate.puedeParticipar(hipo) shouldBe false
+      }
+      "cuando no cumple el criterio de admision de una carrera" in {
+        carreraConCriterioMontura.puedeParticipar(astrid) shouldBe false
+      }
+      "cuando no cumple el criterio de admision de un combate con arma" in {
+        combateConArma.puedeParticipar(balti) shouldBe false
       }
     }
     "un vikingo puede participar en una posta" - {
@@ -45,6 +51,16 @@ class PostasSpec extends FreeSpec with Matchers {
         val participantesLuegoDelCombate = combate.hacerParticipar(List(patan, astrid, hipo))
         participantesLuegoDelCombate.head.peso shouldBe patan.peso
         participantesLuegoDelCombate.filter(_.peso == hipo.peso) shouldBe List.empty
+      }
+      "devuelve los participantes ordenados por el criterio ganador de la pesca" in {
+        val participantesLuegoDelCombate = pesca.hacerParticipar(List(patan, astrid, balti))
+        participantesLuegoDelCombate.head.velocidad shouldBe balti.velocidad
+        participantesLuegoDelCombate.head.nivelDeHambre shouldBe balti.nivelDeHambre+5
+      }
+      "devuelve los participantes ordenados por el criterio ganador de la carrera" in {
+        val participantesLuegoDelCombate = carrera.hacerParticipar(List(patan, astrid, balti))
+        participantesLuegoDelCombate.head.velocidad shouldBe astrid.velocidad
+        participantesLuegoDelCombate.head.nivelDeHambre shouldBe astrid.nivelDeHambre+12
       }
     }
   }
