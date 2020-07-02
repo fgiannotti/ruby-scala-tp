@@ -12,9 +12,10 @@ object SpecObjects {
   val ragnar: Vikingo = Vikingo(peso = 110, velocidad = 140, barbarosidad = 30, nivelDeHambre = 0, item = Arma(200))
   val ivar: Vikingo = Vikingo(peso = 60, velocidad = 13, barbarosidad = 3, nivelDeHambre = 1, item = Arma(10))
   val floki: Vikingo = Vikingo(peso = 80, velocidad = 45, barbarosidad = 300, nivelDeHambre = 0, item = Arma(100))
+  val bjorn: Vikingo = Vikingo(peso = 90, velocidad = 100, barbarosidad = 30, nivelDeHambre = 0, item = Arma(200))
 
   val equipoPanzaLlena: Equipo = Equipo(List(vikingoLleno, otroVikingoLleno))
-  val equipoKattegat: Equipo = Equipo(List(ragnar, ivar, floki))
+  val equipoKattegat: Equipo = Equipo(List(ragnar, bjorn, floki))
   val equipoBerg: Equipo = Equipo(List(hipo, astrid, patan, balti))
 
   val combate: Combate = Combate(Some(BarbaridadMinima(3)))
