@@ -1,9 +1,12 @@
 package tp
 
 case class Equipo(vikingos: List[Vikingo]) {
-  def rearmarse(vikingosNuevos: List[Vikingo]): Equipo =
-    Equipo(vikingosNuevos.filter(v => vikingos.contains(v)))
-
+  //aca estamos comparando al equipo original con los vikingosNuevos. Pero los vikingosNuevos tienen mayor nivel de hambre
+  //dado que jugaron una posta, entonces esta devolviendo lista vacia porque no matchea el filter.
+  //arregle eso con un aux map que usa participarEnPosta(posta) para que tengan el mismo nivel de hambre
+  //PERO no sirve para jinetes porque si participa como jinete aumenta 5 el nivel de hambre y no el de la posta
+  def rearmarse(vikingosNuevos: List[Vikingo], posta: Posta): Equipo =
+    Equipo(vikingosNuevos.filter(v => vikingosNuevos.exists(p => p.equals(v))))
 }
 
 trait Torneo[T] {
@@ -39,11 +42,11 @@ trait Torneo[T] {
   }
 
   def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] = {
-   resultadoPosta match{
-    case (x::s::xs) => resultadoPosta.take(resultadoPosta.size / 2)
-    case _ => resultadoPosta
+    resultadoPosta match {
+      case (x :: s :: xs) => resultadoPosta.take(resultadoPosta.size / 2)
+      case _ => resultadoPosta
+    }
   }
- }
 
 
   def prepararParticipantes(vikingos: List[Vikingo], dragones: List[Dragon], posta: Posta): List[Participante] = {
@@ -58,6 +61,7 @@ trait Torneo[T] {
       }.getOrElse(vikingo)
     }
   }
+
   def elegirGanador(jugadores: List[T]): T
 }
 
@@ -77,7 +81,7 @@ case class TorneoConEliminacion(override val postas: List[Posta], override val d
 }
 
 case class TorneoInverso(override val postas: List[Posta], override val dragones: List[Dragon], override val jugadores: List[Vikingo])
-extends TorneoEstandar(postas, dragones, jugadores) {
+  extends TorneoEstandar(postas, dragones, jugadores) {
   override def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] =
     resultadoPosta.drop(resultadoPosta.size / 2)
 
@@ -104,11 +108,12 @@ case class TorneoPorEquipos(override val postas: List[Posta], override val drago
   override def jugarPosta(posta: Posta, jugadores: List[Equipo]): List[Equipo] = {
     val participantes = jugadores.flatMap(_.vikingos)
     val vikingosFinalistas = obtenerGanadores(participantes, posta)
-    jugadores.map(_.rearmarse(vikingosFinalistas))
+    jugadores.map(_.rearmarse(vikingosFinalistas, posta))
   }
 
   override def elegirGanador(jugadores: List[Equipo]): Equipo =
     jugadores.sortWith((e1, e2) => e1.vikingos.size >= e2.vikingos.size).head
+
 }
 
 

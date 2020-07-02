@@ -48,6 +48,11 @@ case class Vikingo(peso: Int, velocidad: Double, barbarosidad: Int, nivelDeHambr
       case _ => None
     }
   }
+
+  override def equals(obj: Any): Boolean = {
+    val vikingo = obj.asInstanceOf[Vikingo]
+    this.barbarosidad.equals(vikingo.barbarosidad) & this.item.equals(vikingo.item) & this.peso.equals(vikingo.peso) & this.velocidad.equals(vikingo.velocidad)
+  }
 }
 
 case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
