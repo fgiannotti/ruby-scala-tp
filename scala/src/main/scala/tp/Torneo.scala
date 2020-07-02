@@ -29,7 +29,7 @@ trait Torneo[T] {
 
   def jugarPosta(posta: Posta, jugadores: List[T]): List[T]
 
-  def obtenerGanadores(vikingos: List[Vikingo], posta: Posta): List[Vikingo] = {
+  def obtenerVikingosSobrevivientes(vikingos: List[Vikingo], posta: Posta): List[Vikingo] = {
     val participantesPreparados = prepararParticipantes(vikingos, dragones, posta)
     val resultadoPosta = posta.hacerParticipar(participantesPreparados)
     eliminarParticipantesLuegoDePosta(resultadoPosta).map {
@@ -66,7 +66,7 @@ class TorneoEstandar(override val postas: List[Posta], override val dragones: Li
 
   override def elegirGanador(jugadores: List[Vikingo]): Vikingo = jugadores.head
 
-  override def jugarPosta(posta: Posta, jugadores: List[Vikingo]): List[Vikingo] = this.obtenerGanadores(jugadores, posta)
+  override def jugarPosta(posta: Posta, jugadores: List[Vikingo]): List[Vikingo] = this.obtenerVikingosSobrevivientes(jugadores, posta)
 
 }
 
@@ -103,7 +103,7 @@ case class TorneoHandicap(override val postas: List[Posta], override val dragone
 case class TorneoPorEquipos(override val postas: List[Posta], override val dragones: List[Dragon], override val jugadores: List[Equipo]) extends Torneo[Equipo] {
   override def jugarPosta(posta: Posta, jugadores: List[Equipo]): List[Equipo] = {
     val participantes = jugadores.flatMap(_.vikingos)
-    val vikingosFinalistas = obtenerGanadores(participantes, posta)
+    val vikingosFinalistas = obtenerVikingosSobrevivientes(participantes, posta)
     jugadores.map(_.rearmarse(vikingosFinalistas))
   }
 
