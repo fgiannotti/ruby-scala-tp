@@ -25,7 +25,9 @@ case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision] = None) e
   override def costoParticipacion: Int = km
 }
 
-case class Combate(criterioAdmision: Option[CriterioAdmision] = None) extends Posta {
+case class Combate(criterioDeCombate: CriterioAdmision) extends Posta {
+  override def criterioAdmision: Option[CriterioAdmision] = Option(criterioDeCombate)
+
   override def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean =
     participante.danio >= otroParticipante.danio
 

@@ -18,8 +18,8 @@ object SpecObjects {
   val equipoKattegat: Equipo = Equipo(List(ragnar, bjorn, floki))
   val equipoBerg: Equipo = Equipo(List(hipo, astrid, patan, balti))
 
-  val combate: Combate = Combate(Some(BarbaridadMinima(3)))
-  val combateConArma: Combate = Combate(Some(TieneArma()))
+  val combate: Combate = Combate(BarbaridadMinima(3))
+  val combateConArma: Combate = Combate(TieneArma())
   val pesca: Pesca = Pesca(Some(PesoMinimo(50)))
   val carrera: Carrera = Carrera(12)
   val carreraConCriterioMontura: Carrera = Carrera(10, Some(EsJinete()))
