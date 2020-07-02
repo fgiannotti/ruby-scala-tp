@@ -14,11 +14,7 @@ trait Torneo[T] {
   def jugadores: List[T]
 
   def jugarTorneo: Option[T] = {
-    jugarPostas(postas, jugadores) match {
-      case Nil => None
-      case x :: Nil => Option(x)
-      case finalistas => Option(elegirGanador(finalistas))
-    }
+    jugarPostas(postas, jugadores).headOption
   }
 
   def jugarPostas(postas: List[Posta], jugadores: List[T]): List[T] = {
@@ -58,13 +54,10 @@ trait Torneo[T] {
       }.getOrElse(vikingo)
     }
   }
-  def elegirGanador(jugadores: List[T]): T
 }
 
 class TorneoEstandar(override val postas: List[Posta], override val dragones: List[Dragon], override val jugadores: List[Vikingo])
   extends Torneo[Vikingo] {
-
-  override def elegirGanador(jugadores: List[Vikingo]): Vikingo = jugadores.head
 
   override def jugarPosta(posta: Posta, jugadores: List[Vikingo]): List[Vikingo] = this.obtenerVikingosSobrevivientes(jugadores, posta)
 
@@ -80,8 +73,6 @@ case class TorneoInverso(override val postas: List[Posta], override val dragones
 extends TorneoEstandar(postas, dragones, jugadores) {
   override def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] =
     resultadoPosta.drop(resultadoPosta.size / 2)
-
-  override def elegirGanador(jugadores: List[Vikingo]): Vikingo = jugadores.head
 }
 
 case class TorneoConVeto(override val postas: List[Posta], override val dragones: List[Dragon], override val jugadores: List[Vikingo], condicion: Dragon => Boolean)
@@ -107,8 +98,9 @@ case class TorneoPorEquipos(override val postas: List[Posta], override val drago
     jugadores.map(_.rearmarse(vikingosFinalistas))
   }
 
-  override def elegirGanador(jugadores: List[Equipo]): Equipo =
-    jugadores.sortWith((e1, e2) => e1.vikingos.size >= e2.vikingos.size).head
+  override def jugarTorneo: Option[Equipo] = {
+    jugarPostas(postas, jugadores).sortWith((e1, e2) => e1.vikingos.size >= e2.vikingos.size).headOption
+  }
 }
 
 
