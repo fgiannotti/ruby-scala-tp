@@ -81,7 +81,7 @@ class TorneoSpec extends FreeSpec with Matchers {
     }
 
     "un torneo por equipos con el equipoPanzaLlena" - {
-      val torneoPorEquipos: TorneoPorEquipos = TorneoPorEquipos(List(pesca), List(furiaNocturaSuperDanio), List(equipoPanzaLlena))
+      val torneoPorEquipos: TorneoPorEquipos = TorneoPorEquipos(List(pesca), List(furiaNocturaSuperDanio), List(equipoPanzaLlena, Equipo(List(vikingoReLleno))))
       "no debería tener ganador porque no pueden competir" in {
         torneoPorEquipos.jugarTorneo shouldBe Some(Equipo(List()))
       }

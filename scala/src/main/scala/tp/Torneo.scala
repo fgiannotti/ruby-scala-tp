@@ -13,13 +13,14 @@ trait Torneo[T] {
   def jugadores: List[T]
 
   def jugarTorneo: Option[T] = {
-    jugarPostas(postas, jugadores).headOption
+    jugarPostas(jugadores, postas).headOption
   }
 
-  def jugarPostas(postas: List[Posta], jugadores: List[T]): List[T] = {
-    val posta = postas.head
-    val ganadoresPosta = jugarPosta(posta, jugadores)
-    if (postas.size == 1 || ganadoresPosta.size <= 1) ganadoresPosta else jugarPostas(postas.tail, ganadoresPosta)
+  def jugarPostas(ts: List[T], postas: List[Posta]): List[T] = (ts, postas) match {
+    case (t :: Nil, _) => List(t)
+    case (Nil, _) => List()
+    case (_, p :: ps) => jugarPostas(jugarPosta(p, ts), ps)
+    case _ => ts
   }
 
   def jugarPosta(posta: Posta, jugadores: List[T]): List[T]
@@ -98,7 +99,7 @@ case class TorneoPorEquipos(override val postas: List[Posta], override val drago
   }
 
   override def jugarTorneo: Option[Equipo] = {
-    jugarPostas(postas, jugadores).sortWith((e1, e2) => e1.vikingos.size >= e2.vikingos.size).headOption
+    jugarPostas(jugadores, postas).sortWith((e1, e2) => e1.vikingos.size >= e2.vikingos.size).headOption
   }
 }
 
