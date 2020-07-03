@@ -2,7 +2,7 @@ package tp
 
 case class Equipo(vikingos: List[Vikingo]) {
   def rearmarse(vikingosNuevos: List[Vikingo]): Equipo =
-    Equipo(vikingosNuevos.filter(v => vikingos.exists(p=>p.equals(v))))
+    Equipo(vikingosNuevos.filter(v => vikingos.exists(p => p.equals(v))))
 }
 
 trait Torneo[T] {
@@ -35,11 +35,11 @@ trait Torneo[T] {
   }
 
   def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] = {
-   resultadoPosta match{
-    case x::s::xs => resultadoPosta.take(resultadoPosta.size / 2)
-    case _ => resultadoPosta
+    resultadoPosta match {
+      case x :: s :: xs => resultadoPosta.take(resultadoPosta.size / 2)
+      case _ => resultadoPosta
+    }
   }
- }
 
 
   def prepararParticipantes(vikingos: List[Vikingo], dragones: List[Dragon], posta: Posta): List[Participante] = {
@@ -70,7 +70,7 @@ case class TorneoConEliminacion(override val postas: List[Posta], override val d
 }
 
 case class TorneoInverso(override val postas: List[Posta], override val dragones: List[Dragon], override val jugadores: List[Vikingo])
-extends TorneoEstandar(postas, dragones, jugadores) {
+  extends TorneoEstandar(postas, dragones, jugadores) {
   override def eliminarParticipantesLuegoDePosta(resultadoPosta: List[Participante]): List[Participante] =
     resultadoPosta.drop(resultadoPosta.size / 2)
 }
