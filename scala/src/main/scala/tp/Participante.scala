@@ -20,7 +20,8 @@ trait Participante {
   def esMejorQue(participante: Participante)(posta: Posta): Boolean =
     posta.esMejorQue(this, participante)
 
-  def participarEnPosta(posta: Posta): Participante
+  def aumentarHambre(porcentaje: Int): Participante
+
 }
 
 case class Vikingo(peso: Int, velocidad: Double, barbarosidad: Int, nivelDeHambre: Int, item: Item) extends Participante {
@@ -35,10 +36,7 @@ case class Vikingo(peso: Int, velocidad: Double, barbarosidad: Int, nivelDeHambr
   def montar(dragon: Dragon): Participante =
     if (dragon.puedeSerMontadoPor(this)) Jinete(this, dragon) else this
 
-  def participarEnPosta(posta: Posta): Participante =
-    aumentarHambre(posta.costoParticipacion)
-
-  def aumentarHambre(porcentaje: Int): Vikingo =
+  override def aumentarHambre(porcentaje: Int): Vikingo =
     copy(nivelDeHambre = nivelDeHambre + porcentaje)
 
   def mejorMontura(dragones: List[Dragon], posta: Posta): Option[Dragon] = {
@@ -70,6 +68,6 @@ case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
 
   override def item: Item = vikingo.item
 
-  override def participarEnPosta(posta: Posta): Participante = copy(vikingo.aumentarHambre(5))
+  override def aumentarHambre(porcentaje: Int = 5): Participante = copy(vikingo.aumentarHambre(porcentaje))
 }
 

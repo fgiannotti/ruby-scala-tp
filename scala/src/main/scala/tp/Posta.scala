@@ -2,15 +2,15 @@ package tp
 
 import tp.CriterioAdmision.CriterioAdmision
 
-trait Posta {
+trait Posta extends Hambrienta {
   def puedeParticipar(participante: Participante): Boolean = {
-    !participante.participarEnPosta(this).quedariaHambriento && criterioAdmision.forall(_.apply(participante))
+    !efectoSobreParticipante(participante, costoParticipacion).quedariaHambriento && criterioAdmision.forall(_.apply(participante))
   }
   def criterioAdmision: Option[CriterioAdmision]
   def hacerParticipar(participantes: List[Participante]): List[Participante] = participantes
-      .filter(participante => puedeParticipar(participante))
-      .map(participante => participante.participarEnPosta(this))
-      .sortBy(participante => this.criterioGanador(participante)).reverse
+      .filter(puedeParticipar)
+      .map(efectoSobreParticipante(_, costoParticipacion))
+      .sortBy(criterioGanador).reverse
   def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean
   def criterioGanador(participante: Participante): Double
   def costoParticipacion: Int
@@ -45,4 +45,12 @@ case class Pesca(criterioAdmision: Option[CriterioAdmision] = None) extends Post
     participante.maximaCargaDePescado >= otroParticipante.maximaCargaDePescado
 
   override def costoParticipacion: Int = 5
+}
+
+trait Hambrienta {
+  def efectoSobreParticipante(participante: Participante, costoParticipacion: Int): Participante =
+    participante match {
+      case jinete: Jinete => jinete.aumentarHambre()
+      case vikingo: Vikingo => vikingo.aumentarHambre(costoParticipacion)
+    }
 }
