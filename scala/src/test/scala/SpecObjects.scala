@@ -6,7 +6,6 @@ object SpecObjects {
   val astrid: Vikingo = Vikingo(peso = 90, velocidad = 40, barbarosidad = 6, nivelDeHambre = 0, item = Arma(30))
   val astridPesada: Vikingo = Vikingo(peso = 120, velocidad = 40, barbarosidad = 6, nivelDeHambre = 0, item = Arma(40))
   val patan: Vikingo = Vikingo(peso = 79, velocidad = 30, barbarosidad = 3, nivelDeHambre = 0, item = Arma(100))
-  val patapez: Patapez.type = Patapez
   val vikingoLleno: Vikingo = Vikingo(peso = 150, velocidad = 10, barbarosidad = 10, nivelDeHambre = 99, item = Arma(25))
   val otroVikingoLleno: Vikingo = Vikingo(peso = 155, velocidad = 11, barbarosidad = 15, nivelDeHambre = 99, item = Arma(30))
   val ragnar: Vikingo = Vikingo(peso = 110, velocidad = 140, barbarosidad = 30, nivelDeHambre = 0, item = Arma(200))
@@ -35,30 +34,6 @@ object SpecObjects {
 
   val gronkle: Dragon = Dragon(80, Gronkle(600, List(NoSuperaPesoMaximo(97))))
   val dragones = List(chimuelo, dragonNadder, gronkle)
-
-  case object Patapez extends Participante {
-
-    override def maximaCargaDePescado: Double = ???
-
-    var nivelDeHambre: Int = 0
-
-    override def peso: Int = ???
-
-    override def velocidad: Double = ???
-
-    override def barbarosidad: Int = ???
-
-    override def item: Item = Comestible(6)
-
-    override def danio: Int = ???
-
-    def participarEnPosta(posta: Posta): Participante = aumentarHambre(posta.costoParticipacion * 2)
-
-    def aumentarHambre(porcentaje: Int): Participante = {
-      nivelDeHambre = nivelDeHambre + porcentaje
-      this
-    }
-  }
 
   val jugadores = List(hipo, astrid, balti, astridPesada)
 

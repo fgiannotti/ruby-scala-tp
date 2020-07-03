@@ -2,21 +2,21 @@ package tp
 
 import tp.CriterioAdmision.CriterioAdmision
 
-trait Posta extends Hambrienta {
+trait Posta {
   def puedeParticipar(participante: Participante): Boolean = {
-    !efectoSobreParticipante(participante, costoParticipacion).quedariaHambriento && criterioAdmision.forall(_.apply(participante))
+    !efectoSobreParticipante(participante).quedariaHambriento && criterioAdmision.forall(_.apply(participante))
   }
   def criterioAdmision: Option[CriterioAdmision]
   def hacerParticipar(participantes: List[Participante]): List[Participante] = participantes
       .filter(puedeParticipar)
-      .map(efectoSobreParticipante(_, costoParticipacion))
+      .map(efectoSobreParticipante)
       .sortBy(criterioGanador).reverse
   def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean
   def criterioGanador(participante: Participante): Double
-  def costoParticipacion: Int
+  def efectoSobreParticipante(participante: Participante): Participante
 }
 
-case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision] = None) extends Posta {
+case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision] = None) extends Posta with Hambrienta {
   override def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean =
     participante.velocidad >= otroParticipante.velocidad
 
@@ -25,7 +25,7 @@ case class Carrera(km: Int, criterioAdmision: Option[CriterioAdmision] = None) e
   override def costoParticipacion: Int = km
 }
 
-case class Combate(criterioDeCombate: CriterioAdmision) extends Posta {
+case class Combate(criterioDeCombate: CriterioAdmision) extends Posta with Hambrienta {
   override def criterioAdmision: Option[CriterioAdmision] = Option(criterioDeCombate)
 
   override def esMejorQue(participante: Participante, otroParticipante: Participante): Boolean =
@@ -37,7 +37,7 @@ case class Combate(criterioDeCombate: CriterioAdmision) extends Posta {
   override def costoParticipacion: Int = 10
 }
 
-case class Pesca(criterioAdmision: Option[CriterioAdmision] = None) extends Posta {
+case class Pesca(criterioAdmision: Option[CriterioAdmision] = None) extends Posta with Hambrienta {
 
   override def criterioGanador(participante: Participante): Double = participante.maximaCargaDePescado
 
@@ -48,7 +48,9 @@ case class Pesca(criterioAdmision: Option[CriterioAdmision] = None) extends Post
 }
 
 trait Hambrienta {
-  def efectoSobreParticipante(participante: Participante, costoParticipacion: Int): Participante =
+  def costoParticipacion: Int
+
+  def efectoSobreParticipante(participante: Participante): Participante =
     participante match {
       case jinete: Jinete => jinete.aumentarHambre()
       case vikingo: Vikingo => vikingo.aumentarHambre(costoParticipacion)
