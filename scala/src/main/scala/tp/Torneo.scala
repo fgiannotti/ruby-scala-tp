@@ -43,16 +43,15 @@ trait Torneo[T] {
 
 
   def prepararParticipantes(vikingos: List[Vikingo], dragones: List[Dragon], posta: Posta): List[Participante] = {
-    var dragonesDisponibles = dragones
-
-    vikingos.map { vikingo =>
-      val dragonElegido = vikingo.mejorMontura(dragonesDisponibles, posta)
-
-      dragonElegido.map { dragon =>
-        dragonesDisponibles = dragonesDisponibles.filterNot(_.equals(dragon))
-        vikingo.montar(dragon)
-      }.getOrElse(vikingo)
-    }
+    vikingos.foldLeft((dragones, List(): List[Participante])) {
+      case ((dragones, vikingosResultado), vikingo) =>
+        val dragonElegido = vikingo.mejorMontura(dragones, posta)
+        dragonElegido.map { dragon =>
+          (dragones.filterNot(_.equals(dragon)), vikingosResultado :+ vikingo.montar(dragon))
+        }.getOrElse {
+          (dragones, vikingosResultado :+ vikingo)
+        }
+    }._2
   }
 }
 
