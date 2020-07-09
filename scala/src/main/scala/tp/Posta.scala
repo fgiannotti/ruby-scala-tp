@@ -51,8 +51,6 @@ trait Hambrienta {
   def costoParticipacion: Int
 
   def efectoSobreParticipante(participante: Participante): Participante =
-    participante match {
-      case jinete: Jinete => jinete.aumentarHambre()
-      case vikingo: Vikingo => vikingo.aumentarHambre(costoParticipacion)
-    }
+    participante.aumentarHambre(costoParticipacion)
+
 }

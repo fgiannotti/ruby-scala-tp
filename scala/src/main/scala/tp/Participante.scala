@@ -68,6 +68,6 @@ case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
 
   override def item: Item = vikingo.item
 
-  override def aumentarHambre(porcentaje: Int = 5): Participante = copy(vikingo.aumentarHambre(porcentaje))
+  override def aumentarHambre(porcentaje: Int): Participante = copy(vikingo.aumentarHambre(5))
 }
 
