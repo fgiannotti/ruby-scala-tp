@@ -1,4 +1,4 @@
-# PoC of metaprogramming in ruby
+## PoC of metaprogramming in ruby
 
 Creation of [Traits](https://en.wikipedia.org/wiki/Trait_(computer_programming)#:~:text=In%20computer%20programming%2C%20a%20trait,the%20functionality%20of%20a%20class.), with custom `uses` keyword:
 
